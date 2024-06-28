@@ -1,0 +1,29 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  }
+  a {
+    text-decoration: none;
+  }
+  header {
+    padding: 20px;
+    background-color:rebeccapurple;
+  }
+  .nav-link{
+    color: white;
+    margin-left: 20px;
+  }
+
+  h2{
+    margin: 20px;
+  }
+
+  a{
+    text-decoration: none;
+  }
+
+  .post{
+    padding: 20px;
+  }
