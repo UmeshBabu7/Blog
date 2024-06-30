@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from .forms import PostCreationForm
 from .models import Post
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
@@ -28,21 +29,23 @@ def index(request):
         'title':'Home Page '
     }
 
-    return render(request,'home.html',context)
+    return render(request,'posts/home.html',context)
 
 def about(request):
     context={
         "title":"About Page "
     }
-    return render(request,'about.html',context)
+    return render(request,'posts/about.html',context)
 
 def services(request):
     context={
         "title":"Services Page "
     }
-    return render(request,'services.html',context)
+    return render(request,'posts/services.html',context)
 
+@login_required
 def create_post(request):
+
     form=PostCreationForm()
 
     if request.method =="POST":
@@ -51,17 +54,18 @@ def create_post(request):
         if form.is_valid():
             form.save()
 
-        return redirect('posts_home')
+        return redirect('posts/posts_home')
     
-    context={'form':form}
-    return render(request,'createpost.html',context)
+    context={'form':form,'title':'Create_post'}
+    return render(request,'posts/createpost.html',context)
 
 def post_detail(request,post_id):
     post=Post.objects.get(pk=post_id)
 
     context={'post':post}
-    return render(request,'post_detail.html',context)
+    return render(request,'posts/post_detail.html',context)
 
+@login_required
 def update_post(request,post_id):
     post_to_update=Post.objects.get(pk=post_id)
 
@@ -76,12 +80,12 @@ def update_post(request,post_id):
         if form.is_valid():
             form.save()
 
-            return redirect('posts_home')
+            return redirect('posts/posts_home')
 
     context={
         'form':form
     }
-    return render(request,'update.html',context)
+    return render(request,'posts/update.html',context)
     
     
 
