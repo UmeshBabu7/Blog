@@ -1,9 +1,10 @@
 from django.shortcuts import render,redirect
+
 from .forms import LoginForm,UserRegistrationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout,authenticate
 from django.contrib import messages
-from django.views import View
+
 
 
 # Create your views here.
