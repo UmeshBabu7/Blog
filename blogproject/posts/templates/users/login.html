@@ -1,30 +1,32 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<form action="" method="post" enctype="multipart/form-data">
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  <form action="" method="post" enctype="multipart/form-data">
     {% if messages %} {% for message in messages %}
     <p class="alert">{{message}}</p>
     {% endfor %} {% endif %}
-    
-     <h1>Login</h1>
-     {% csrf_token %}
 
-     {% for field in form %}
-     <div class="form-group">
-          <p class="label">{{field.label}}</p>
-          {{field}}
-     </div>
+    <h1>Login</h1>
+    {% csrf_token %} {% if form.errors %}
+    <p class="alert-error">Invalid Username Or Password</p>
+    {% endif %} {% for field in form %}
+    <div class="form-group">
+      <p class="label">{{ field.label }}</p>
+      {{field}}
+    </div>
+    {% endfor %}
 
-     {% endfor %}
-     <div class="form-group">
-     <input type="submit" value="Login" class="btn">
-     </div>
-     <div class="form-group">
-        <small>
-            <p>Do not have an account? <a href="{% url 'sign_up' %}">SignUp</a></p>
-        </small>
-     </div>
+    <div class="form-group">
+      <input type="submit" value="Login" class="btn" />
+    </div>
 
-</form>
-
+    <div class="form-group">
+      <small>
+        <p>
+          Do not have an account?
+          <a href="{% url 'sign_up' %}">Create an Account</a>
+        </p>
+      </small>
+    </div>
+  </form>
+</div>
 {% endblock content %}
