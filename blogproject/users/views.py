@@ -3,6 +3,7 @@ from .forms import LoginForm,UserRegistrationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout,authenticate
 from django.contrib import messages
+from django.views import View
 
 
 # Create your views here.
@@ -39,6 +40,7 @@ def login_user(request):
     
     context={'form':form}
     return render(request,'users/login.html',context)
+
 
 def logout_user(request):
     logout(request)
