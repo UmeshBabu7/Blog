@@ -22,7 +22,11 @@ posts=[
 ]
 
 def index(request):
-    return HttpResponse("Hello umesh")
+    context={
+        'posts':posts,
+        'title':"Home Page"
+    }
+    return render(request,'index.html',context)
 
 
 def return_all_posts(request):
@@ -34,3 +38,17 @@ def return_one_post(request,post_id):
             return HttpResponse(str(post))
         
     return HttpResponse("Not found")
+
+
+def about(request):
+    context={
+        'title':"About page"
+    }
+    return render(request,'about.html',context)
+
+
+def services(request):
+    context={
+        'title':'services page'
+    }
+    return render(request,'services.html',context)
