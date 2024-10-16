@@ -1,0 +1,32 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Arial", sans-serif;
+}
+
+header{
+    background-color:grey;
+    padding: 20px;
+}
+
+.nav-link{
+    color: white;
+    margin-left: 20px;
+}
+
+.image{
+    width: 200px;
+}
+
+h1{
+    margin: 20px;
+}
+
+a{
+    text-decoration: none;
+}
+
+.post{
+    padding: 20px;
+}
