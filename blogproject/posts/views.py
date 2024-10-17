@@ -1,43 +1,18 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
+from .forms import PostCreationForm
+from .models import Post
 
 # Create your views here.
 
-posts=[
-    {
-        "id":1,
-        "title":"Python",
-        "author":"Umesh"
-    },
-    {
-        "id":2,
-        "title":"Javascript",
-        "author":"Ramesh"
-    },
-    {
-        "id":3,
-        "title":"Dotnet",
-        "author":"Ishan"
-    },
-]
+
 
 def index(request):
+    posts=Post.objects.all()
     context={
-        'posts':posts,
-        'title':"Home Page"
+        'posts':posts
     }
     return render(request,'index.html',context)
-
-
-def return_all_posts(request):
-    return HttpResponse(str(posts))
-
-def return_one_post(request,post_id):
-    for post in posts:
-        if post["id"] ==post_id:
-            return HttpResponse(str(post))
-        
-    return HttpResponse("Not found")
 
 
 def about(request):
@@ -52,3 +27,30 @@ def services(request):
         'title':'services page'
     }
     return render(request,'services.html',context)
+
+
+def create_post(request):
+    form=PostCreationForm()
+
+    if request.method =="POST":
+        data= request.POST
+
+        title= data["title"]
+        content=data["content"]
+        author=data["author"]
+
+        new_post=Post(
+            title=title,
+            content=content,
+            author=author
+        )
+
+        new_post.save()
+    # return redirect('posts_home')
+    
+    context={
+        'form':form
+
+    }
+
+    return render(request,'createpost.html',context)
