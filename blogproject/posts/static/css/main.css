@@ -36,3 +36,26 @@ form {
     margin: auto;
     width: 50%;
   }
+
+.form-control{
+    width: 100%;
+}
+
+.form-group{
+    margin-top: 10px;
+}
+.label{
+    margin-top: 20px;
+}
+.btn{
+    border: none;
+    background-color: black;
+    cursor: pointer;
+    color: white;
+    padding: 15px;
+}
+
+.link{
+    color: black;
+    text-decoration: none;
+}

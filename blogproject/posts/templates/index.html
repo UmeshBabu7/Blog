@@ -6,9 +6,9 @@
 
     {% for post in posts %}
     <div class="post">
-    <h2>{{post.id}} | {{post.title}}</h2>
-    <p>By <b>{{post.author}}</b></p>
-    <img src="{% static 'images/BabuTamang.jpg' %}" alt="photo" class="image">
+        <a href="{% url 'post_detail' post_id=post.id %}" class="link"><h1>{{ post.id }} |{{ post.title }}</h1></a>
+    
+        <p>{{ post.content }}</p>
     </div>  
 
     {% endfor %}
