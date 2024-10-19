@@ -5,6 +5,7 @@ from .models import Post
 from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.utils.decorators import method_decorator
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -22,8 +23,14 @@ class HomePageView(View):
 
     def get(self,request):
         posts=Post.objects.all()
+
+        paginator=Paginator(posts,3)
+        page_number=request.GET.get('page')
+        print(page_number)
+        page_obj=paginator.get_page(page_number)
+
         context={
-        'posts':posts
+        'posts':page_obj
     }
         return render(request,self.template_name,context)
 
@@ -41,6 +48,7 @@ def services(request):
     }
     return render(request,'services.html',context)
 
+
 @method_decorator(login_required,'dispatch')
 class CreatePostView(View):
     template_name='createpost.html'
@@ -55,6 +63,12 @@ class CreatePostView(View):
         return render(request,'createpost.html',context)
     def post(self,request):
         form=self.form_class(request.POST,request.FILES)
+
+        if form.is_valid():
+            form.save()
+
+            return redirect('posts_home')
+
 
 
 
