@@ -1,35 +1,112 @@
 {% extends 'base.html' %} 
 {% block content %} 
 
-{% if posts %}
-<div class="posts">
-  {% for post in posts %}
-  <div class="post">
-    <a href="{% url 'post_detail' post_id=post.id %}" class="link"
-      ><h1>{{ post.id }} |{{ post.title }}</h1></a
-    >
-    <p class="post-content">{{ post.content }}</p>
-    <img src="{{post.thumbnail.url}}" alt="thumbnail" class="image" />
-  </div>
-  {% endfor %}
-</div>
-{% else %}
-<div class="no-posts">
-  <h1 class="no-posts-head">No posts</h1>
-</div>
-{% endif %}
+<div class="posts-container">
+    {% if posts %}
+    <div class="posts-header">
+        <h1 class="posts-title">Latest Posts</h1>
+        {% if user.is_authenticated %}
+        <a href="{% url 'posts:create_post' %}" class="create-post-button">
+            <svg class="button-icon" viewBox="0 0 24 24" width="20" height="20">
+                <path d="M12 5v14M5 12h14"/>
+            </svg>
+            <span>Create Post</span>
+        </a>
+        {% endif %}
+    </div>
 
-<div class="pagination">
-  {% if posts.has_previous %}
-  <a href="{% url 'posts_home' %}?page={{posts.previous_page_number}}"
-    >Previous</a
-  >
-  {% endif %}
+    <div class="posts-grid">
+        {% for post in posts %}
+        <article class="post-card">
+            <div class="post-thumbnail">
+                <img src="{{post.thumbnail.url}}" alt="{{ post.title }}" class="post-image" />
+                <div class="post-overlay">
+                    <a href="{% url 'posts:post_detail' post_id=post.id %}" class="read-more-overlay">
+                        Read More
+                        <svg class="arrow-icon" viewBox="0 0 24 24" width="16" height="16">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="post-content">
+                <a href="{% url 'posts:post_detail' post_id=post.id %}" class="post-title">
+                    <h2>{{ post.title }}</h2>
+                </a>
+                <p class="post-excerpt">{{ post.content|truncatechars:150 }}</p>
+                <div class="post-meta">
+                    <div class="post-info">
+                        <span class="post-date">
+                            <svg class="meta-icon" viewBox="0 0 24 24" width="16" height="16">
+                                <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            {{ post.created_at|date:"F j, Y" }}
+                        </span>
+                        <span class="post-author">
+                            <svg class="meta-icon" viewBox="0 0 24 24" width="16" height="16">
+                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            {{ post.author.username }}
+                        </span>
+                    </div>
+                    <a href="{% url 'posts:post_detail' post_id=post.id %}" class="read-more">
+                        Read More
+                        <svg class="arrow-icon" viewBox="0 0 24 24" width="16" height="16">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
 
-  <p>Page {{posts.number}} of {{posts.paginator.num_pages}}</p>
-  {% if posts.has_next %}
-  <a href="{% url 'posts_home' %}?page={{posts.next_page_number}}">Next</a>
-  {% endif %}
+    <div class="pagination">
+        {% if posts.has_previous %}
+        <a href="{% url 'posts:posts_home' %}?page={{posts.previous_page_number}}" class="pagination-link">
+            <svg class="pagination-icon" viewBox="0 0 24 24" width="20" height="20">
+                <path d="M15 18l-6-6 6-6"/>
+            </svg>
+            Previous
+        </a>
+        {% endif %}
+
+        <div class="pagination-info">
+            <span class="current-page">{{posts.number}}</span>
+            <span class="page-separator">of</span>
+            <span class="total-pages">{{posts.paginator.num_pages}}</span>
+        </div>
+
+        {% if posts.has_next %}
+        <a href="{% url 'posts:posts_home' %}?page={{posts.next_page_number}}" class="pagination-link">
+            Next
+            <svg class="pagination-icon" viewBox="0 0 24 24" width="20" height="20">
+                <path d="M9 18l6-6-6-6"/>
+            </svg>
+        </a>
+        {% endif %}
+    </div>
+    {% else %}
+    <div class="no-posts">
+        <div class="no-posts-content">
+            <svg class="no-posts-icon" viewBox="0 0 24 24" width="48" height="48">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+                <path d="M12 17h5v-2h-5v2zm0-4h5v-2h-5v2zm0-4h5V7h-5v2zM7 7h3v2H7V7zm0 4h3v2H7v-2zm0 4h3v2H7v-2z"/>
+            </svg>
+            <h1 class="no-posts-title">No Posts Yet</h1>
+            <p class="no-posts-message">Be the first to create a post!</p>
+            {% if user.is_authenticated %}
+            <a href="{% url 'posts:create_post' %}" class="create-post-button">
+                <svg class="button-icon" viewBox="0 0 24 24" width="20" height="20">
+                    <path d="M12 5v14M5 12h14"/>
+                </svg>
+                <span>Create Post</span>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
 </div>
 
 {% endblock content %}

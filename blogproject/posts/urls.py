@@ -2,6 +2,8 @@ from django.urls import path
 from .import views
 from django.contrib.auth.decorators import login_required
 
+app_name='posts'
+
 urlpatterns = [
     path('',views.HomePageView.as_view(),name="posts_home"),
     path('about/',views.about,name="posts_about"),

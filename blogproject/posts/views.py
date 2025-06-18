@@ -67,7 +67,7 @@ class CreatePostView(View):
         if form.is_valid():
             form.save()
 
-            return redirect('posts_home')
+            return redirect('posts:posts_home')
 
 
 
@@ -93,11 +93,11 @@ def update_post(request,post_id):
 
         if form.is_valid():
             form.save()
-
-            return redirect('posts_home')
+            return redirect('posts:posts_home')
 
     context={
-        'form':form
+        'form': form,
+        'post': post_to_update
     }
 
     return render(request,'update.html',context)

@@ -17,7 +17,7 @@ def sign_up(request):
 
             messages.success(request,"User Created Successfully")
 
-            return redirect('login')
+            return redirect('users:login')
 
     context={
         'form':form

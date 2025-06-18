@@ -3,6 +3,8 @@ from . import views
 from django.contrib.auth import views as auth_views
 from .forms import LoginForm
 
+app_name='users'
+
 urlpatterns = [
     path('signup/',views.sign_up,name='sign_up'),
     path('login/',auth_views.LoginView.as_view(

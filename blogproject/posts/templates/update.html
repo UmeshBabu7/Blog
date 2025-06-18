@@ -1,16 +1,47 @@
 {% extends 'base.html' %} {% block content %}
-<div class="container">
-  <form action="" method="post" enctype="multipart/form-data">
-    <h1>Create A post</h1>
-    {% csrf_token %} {% for field in form %}
-    <div class="form-group">
-      <p class="label">{{ field.label }}</p>
-      {{field}}
+
+<div class="update-post-container">
+    <div class="update-post-card">
+        <form action="" method="post" enctype="multipart/form-data" class="update-post-form">
+            <div class="form-header">
+                <h1 class="form-title">Edit Post</h1>
+                <p class="form-subtitle">Make changes to your post below</p>
+            </div>
+
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label class="form-label">{{ field.label }}</label>
+                <div class="form-field">
+                    {{field}}
+                </div>
+                {% if field.help_text %}
+                <small class="form-help-text">{{ field.help_text }}</small>
+                {% endif %}
+                {% if field.errors %}
+                <div class="form-error">
+                    {{ field.errors }}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <div class="form-actions">
+                <button type="submit" class="submit-button">
+                    <svg class="button-icon" viewBox="0 0 24 24" width="20" height="20">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                    </svg>
+                    <span class="button-text">Save Changes</span>
+                </button>
+                <a href="{% url 'posts:post_detail' post_id=post.id %}" class="cancel-button">
+                    <svg class="button-icon" viewBox="0 0 24 24" width="20" height="20">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
+                    </svg>
+                    <span class="button-text">Cancel</span>
+                </a>
+            </div>
+        </form>
     </div>
-    {% endfor %}
-    <div class="form-group">
-      <input type="submit" value="Submit" class="btn" />
-    </div>
-  </form>
 </div>
+
 {% endblock content %}

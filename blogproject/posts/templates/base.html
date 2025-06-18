@@ -4,36 +4,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A modern blog platform for sharing thoughts and ideas">
+    <meta name="theme-color" content="#000000">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
-    <title>{{title}}</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <title>{% if title %}{{ title }} - Blog{% else %}Blog{% endif %}</title>
 </head>
 <body>
-    
     <header>
-        <a class="nav-link" href="{% url 'posts_home' %}">Home</a>
+        <nav class="nav-container">
+            <div class="nav-brand">
+                <a href="{% url 'posts:posts_home' %}" class="brand-link">
+                    <svg class="brand-icon" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+                        <path d="M12 17h5v-2h-5v2zm0-4h5v-2h-5v2zm0-4h5V7h-5v2zM7 7h3v2H7V7zm0 4h3v2H7v-2zm0 4h3v2H7v-2z"/>
+                    </svg>
+                    <span>Blog</span>
+                </a>
+            </div>
+            
+            <div class="nav-links">
+                <a class="nav-link" href="{% url 'posts:posts_home' %}">
+                    <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                        <path d="M9 22V12h6v10"/>
+                    </svg>
+                    <span>Home</span>
+                </a>
 
-        {% if request.user.is_authenticated %}
-        <a class="nav-link" href="{% url 'create_post' %}">Create Post</a>
-        <form method="post" action="{% url 'log_out' %}" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">Log Out</button>
-        </form>
-    {% else %}
-        <a class="nav-link" href="{% url 'sign_up' %}">Sign Up</a>
-        <a class="nav-link" href="{% url 'login' %}">Login</a>
-    {% endif %}
-        
+                {% if request.user.is_authenticated %}
+                    <a class="nav-link" href="{% url 'posts:create_post' %}">
+                        <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                        <span>Create Post</span>
+                    </a>
+                    <form method="post" action="{% url 'users:log_out' %}" class="nav-form">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link nav-button">
+                            <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20">
+                                <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                            </svg>
+                            <span>Log Out</span>
+                        </button>
+                    </form>
+                {% else %}
+                    <a class="nav-link" href="{% url 'users:sign_up' %}">
+                        <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20">
+                            <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                            <circle cx="8.5" cy="7" r="4"/>
+                            <path d="M20 8v6M23 11h-6"/>
+                        </svg>
+                        <span>Sign Up</span>
+                    </a>
+                    <a class="nav-link" href="{% url 'users:login' %}">
+                        <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20">
+                            <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/>
+                            <path d="M10 17l5-5-5-5"/>
+                            <path d="M15 12H3"/>
+                        </svg>
+                        <span>Login</span>
+                    </a>
+                {% endif %}
+            </div>
+        </nav>
     </header>
 
-    {% block content %}
-    {% endblock content %}
+    <main class="main-content">
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                <svg class="message-icon" viewBox="0 0 24 24" width="20" height="20">
+                    {% if message.tags == 'success' %}
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    {% elif message.tags == 'error' %}
+                    <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    {% else %}
+                    <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    {% endif %}
+                </svg>
+                <span>{{ message }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}
+        {% endblock content %}
+    </main>
 
     <footer>
-        &copy, Umesh Tamang 2024
-    </footer>  
+        <div class="footer-content">
+            <div class="footer-section">
+                <p class="copyright">&copy; 2024 Umesh Tamang. All rights reserved.</p>
+            </div>
+            <div class="footer-section">
+                <a href="#" class="footer-link">About</a>
+                <a href="#" class="footer-link">Privacy</a>
+                <a href="#" class="footer-link">Terms</a>
+            </div>
+        </div>
+    </footer>
     
-    <script src="{% static 'js/index.js' %}">
-
-    </script>
+    <script src="{% static 'js/index.js' %}"></script>
 </body>
 </html>
