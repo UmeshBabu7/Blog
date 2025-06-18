@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.core.paginator import Paginator
+from django.db import models
 
 # Create your views here.
 
@@ -101,3 +102,26 @@ def update_post(request,post_id):
     }
 
     return render(request,'update.html',context)
+
+class SearchView(View):
+    template_name = 'index.html'
+
+    def get(self, request):
+        query = request.GET.get('q', '')
+        if query:
+            posts = Post.objects.filter(
+                models.Q(title__icontains=query) | 
+                models.Q(content__icontains=query)
+            )
+        else:
+            posts = Post.objects.all()
+
+        paginator = Paginator(posts, 3)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        context = {
+            'posts': page_obj,
+            'query': query
+        }
+        return render(request, self.template_name, context)
