@@ -1,6 +1,6 @@
 # Blog Project - Django
 
-A full-featured blog application built with Django that allows users to create, read, update, search blog posts with image thumbnails, searching and pagination.
+A full-featured blog application built with Django that allows users to create, read, update, search blog posts with image thumbnails and pagination.
 
 ## Features
 
